@@ -4,7 +4,7 @@
 
 **Note**: Code implementation is insipred by https://github.com/livoras/simple-virtual-dom
 
-Simple virtual dom implementation in typescript, which consists of 3 parts: `render`, `diff` and `patch`.
+Simple virtual dom implementation in typescript. It has only ~300 lines of code, and consists of 3 parts: `render`, `diff` and `patch`.
 
 - `Render` is to manipulate the actual DOM based on virtual Element.
 - `Diff` is to compare between two different virtual DOMs and return the applicable patches.
