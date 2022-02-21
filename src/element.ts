@@ -64,7 +64,7 @@ export class VElement {
   }
 
   public toEqual(vEle: VElement | string) {
-    if (typeof vEle === "string") {
+    if (typeof vEle === "string" || vEle === undefined) {
       return false;
     }
     if (vEle.tagName !== this.tagName || vEle.count !== this.count) {

@@ -8,17 +8,25 @@ import { ElementChildren, ElementProp, VElement } from "./element";
  * both old and new vDOMs to find differences and apply patches to the old vDOM
  */
 
-interface PropPatchesMap {
+export interface PropPatchesMap {
   remove: string[];
-  add: ElementProp[];
+  add: Array<string[]>;
 }
 
-type PatchAction = "updateText" | "updateProps" | "replace" | "remove" | "add";
-interface PatchState {
+export type PatchAction =
+  | "updateText"
+  | "updateProps"
+  | "replace"
+  | "remove"
+  | "add";
+export interface PatchState {
   action: PatchAction;
-  context: VElement | PropPatchesMap | string;
+  context: VElement | string;
+  propPatches?: PropPatchesMap;
+  index?: number;
 }
-interface VDomPatchState {
+
+export interface VDomPatchState {
   [index: number]: PatchState[];
 }
 
@@ -61,10 +69,10 @@ const dfsWalk = (
     if (propPatches.add.length > 0 || propPatches.remove.length > 0) {
       currentPatches.push({
         action: "updateProps",
-        context: propPatches,
+        context: null,
+        propPatches: propPatches,
       });
     }
-    console.log(index, "compare children");
     // compare children
     diffVChildren(
       oldEle.children,
@@ -78,8 +86,10 @@ const dfsWalk = (
   // both old and new child is the same vElement
   else if (
     oldEle === newEle ||
-    (oldEle instanceof VElement && (oldEle as VElement).toEqual(newEle))
+    (oldEle instanceof VElement && (oldEle as VElement).toEqual(newEle)) ||
+    newEle == null
   ) {
+    return;
   }
   // elements are different, replace old one with the new one
   else {
@@ -111,7 +121,7 @@ const diffProps = (oldProps: ElementProp, newProps: ElementProp) => {
   // find props that has changed in new element
   for (const propKey in newProps) {
     if (oldProps[propKey] !== newProps[propKey]) {
-      propPatches.add.push({ [propKey]: newProps[propKey] });
+      propPatches.add.push([propKey, newProps[propKey]]);
     }
   }
 
@@ -140,7 +150,8 @@ const diffVChildren = (
     else if (newChildren[i] === undefined && oldChildren[i]) {
       curPatches.push({
         action: "remove",
-        context: oldChildren[i],
+        context: null,
+        index: i,
       });
     }
     // both old and new child is the same text
