@@ -82,8 +82,8 @@ const dfsWalk = (
       currentPatches
     );
   }
-  // both old and new child is the same text
-  // both old and new child is the same vElement
+  // both old and new child are the same text
+  // both old and new child are the same vElement
   else if (
     oldEle === newEle ||
     (oldEle instanceof VElement && (oldEle as VElement).toEqual(newEle)) ||
@@ -154,8 +154,8 @@ const diffVChildren = (
         index: i,
       });
     }
-    // both old and new child is the same text
-    // both old and new child is the same vElement
+    // both old and new child are the same text
+    // both old and new child are the same vElement
     else if (
       oldChildren[i] === newChildren[i] ||
       (oldChildren[i] instanceof VElement &&

@@ -24,23 +24,23 @@ const patch = (dom: Node, domPatches: VDomPatchState) => {
 };
 
 const applyPatches = (node: Node | HTMLElement, patches: PatchState[]) => {
-  patches.forEach((patch) => {
+  patches.forEach((patchOp) => {
     const newNode =
-      patch.context instanceof VElement
-        ? patch.context.render()
-        : document.createTextNode(patch.context);
+      patchOp.context instanceof VElement
+        ? patchOp.context.render()
+        : document.createTextNode(patchOp.context);
 
-    if (patch.action === "updateText") {
-      node.textContent = patch.context.toString();
-    } else if (patch.action === "replace") {
+    if (patchOp.action === "updateText") {
+      node.textContent = patchOp.context.toString();
+    } else if (patchOp.action === "replace") {
       node.parentNode.replaceChild(newNode, node);
-    } else if (patch.action === "add") {
+    } else if (patchOp.action === "add") {
       node.parentNode.appendChild(newNode);
-    } else if (patch.action === "remove") {
-      node.childNodes[patch.index] && node.childNodes[patch.index].remove();
-    } else if (patch.action === "updateProps") {
-      const addProps = patch.propPatches.add;
-      const removeProps = patch.propPatches.remove;
+    } else if (patchOp.action === "remove") {
+      node.childNodes[patchOp.index] && node.childNodes[patchOp.index].remove();
+    } else if (patchOp.action === "updateProps") {
+      const addProps = patchOp.propPatches.add;
+      const removeProps = patchOp.propPatches.remove;
       removeProps.forEach((prop) => {
         node instanceof HTMLElement && node.removeAttribute(prop);
       });

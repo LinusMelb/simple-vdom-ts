@@ -64,6 +64,7 @@ export class VElement {
   }
 
   public toEqual(vEle: VElement | string) {
+    // tech debt: should compare props too
     if (typeof vEle === "string" || vEle === undefined) {
       return false;
     }
